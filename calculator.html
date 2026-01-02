@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>时间计算器</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; background-color: #f4f4f9; }
+        .container { display: flex; gap: 40px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; }
+        h2 { font-size: 1.2rem; color: #333; margin-top: 0; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 20px; padding: 10px; background: #e9ecef; border-radius: 4px; min-height: 50px; word-break: break-all; }
+        .label { font-size: 0.9rem; color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2>手动输入模式</h2>
+        <div class="label">输入时间 (格式如 14:03)</div>
+        <input type="text" id="manualInput" placeholder="14:03">
+        <button onclick="calculateManual()">计算结果</button>
+        <div class="result" id="manualResult">结果显示在这里</div>
+    </div>
+
+    <div class="card">
+        <h2>自动当前时间</h2>
+        <div class="label">点击下方按钮获取当前系统时间</div>
+        <button onclick="calculateAuto()" style="background: #28a745;">立即获取并计算</button>
+        <div class="result" id="autoResult">结果显示在这里</div>
+    </div>
+</div>
+
+<script>
+    // 核心计算逻辑
+    function performCalculation(timeStr) {
+        // 1. 去掉冒号，转化为数字 (例如 "14:03" -> 1403)
+        const timeValue = parseInt(timeStr.replace(":", ""));
+        
+        if (isNaN(timeValue)) return "格式错误";
+
+        // 2. 9999 - 时间
+        const diff = 9999 - timeValue;
+
+        // 3. n * n (结果的平方)
+        const finalResult = diff * diff;
+
+        return `时间数字: ${timeValue}<br>差值: ${diff}<br><b>最终结果: ${finalResult}</b>`;
+    }
+
+    // 手动计算函数
+    function calculateManual() {
+        const val = document.getElementById('manualInput').value;
+        document.getElementById('manualResult').innerHTML = performCalculation(val);
+    }
+
+    // 自动计算函数
+    function calculateAuto() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const timeStr = hours + ":" + minutes;
+        
+        document.getElementById('autoResult').innerHTML = `当前时间: ${timeStr}<br>` + performCalculation(timeStr);
+    }
+</script>
+
+</body>
+</html>
